@@ -1,0 +1,310 @@
+/*
+*/
+.panel-container {
+  font-family: sans-serif;
+  font-size: 85%;
+  //background-color: red;
+}
+
+#below-grid-panels {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: inline-block;
+  z-index: 10;
+
+  .panel {
+    &.collapsed {
+      //height: 0;
+      & > form {
+        display: none;
+      }
+      border-width: 0;
+    }
+    &.expanded {
+    }
+    @include anim(height);
+
+    .panel-header {
+      .close-button {
+        display: inline-block;
+        float: right;
+        width: 14px;
+        @extend .fa !optional;
+        @extend .fa-close !optional;
+        opacity: 0.5;
+        cursor: pointer;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.sidePanel {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 100%;
+
+  .panel {
+    padding: 5px;
+
+    table {
+      width: 100%;
+      td {
+        label {
+          display: inline-block;
+        }
+        input[type="text"], input[type="number"], label {
+          width: 100%;
+        }
+      }
+    }
+
+    .panel-header {
+      @extend .fa !optional;
+
+      cursor: pointer;
+
+      &:before {
+        padding-right: 1ch;
+        font-weight: normal;
+      }
+    }
+    &.expanded {
+      .panel-header {
+        @extend .fa-minus-square-o !optional;
+      }
+    }
+
+    &.collapsed {
+      box-sizing: content-box;
+      > * {
+        visibility: hidden;
+        @include anim(visibility);
+      }
+      .panel-header {
+        @extend .fa-plus-square-o !optional;
+        border-bottom-color: transparent;
+        visibility: visible;
+      }
+    }
+    @include anim(height);
+  }
+}
+
+.panel {
+  border: $ui-border;
+  background-color: $ui-background;
+  color: $ui-text;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  button
+
+  .panel-header {
+    display: block;
+    font-weight: bold;
+    border-bottom: $ui-border;
+  }
+
+  &.inspector {
+    table {
+      width: 100%;
+      td {
+        box-sizing: content-box;
+        height: 1.5em;
+        label {
+          width: 100%;
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  input[type="text"], input[type="number"], select {
+    text-overflow: ellipsis;
+    &:enabled {
+      border: solid 1px transparent;
+      &:hover, &:focus {
+        border-color: highlight2($ui-border-color);
+      }
+    }
+
+
+    @include anim(border-color);
+  }
+
+  input:disabled {
+    background-color: transparent;
+    border: solid 1px transparent;
+  }
+}
+
+#statusBar {
+
+  font-size: 14px;
+
+  div {
+    display: inline-block;
+  }
+
+  & > div > div {
+    // remove the whitespace between
+    float: left;
+
+    padding: 1px 0.5ch;
+    margin: 1px;
+    @include inset-border($ui-border-color);
+  }
+
+  .right {
+    float:right;
+  }
+
+}
+
+#characterPanel {
+  table {
+    width: 100%;
+  }
+
+  #characterDisplay {
+    display: inline-block;
+    text-align: center;
+    font-size: 30px;
+    font-family: $monospace;
+    canvas {
+      vertical-align: top;
+      border: solid 1px #333;
+    }
+  }
+  #characterInfo {
+    width: 99%;
+    & > span {
+      display: block;
+    }
+
+    font-size: 120%;
+
+    .slang {
+      display: block;
+      font-size: 80%;
+      &:before { content: '('; }
+      &:after { content: ')'; }
+      &:empty {
+        display: none;
+      }
+    }
+  }
+}
+
+._unused-bit {
+  color: highlight2($ui-background);
+  cursor: default;
+
+}
+
+#bitsPanel {
+
+  #numberText {
+    display: block;
+  }
+
+  #bits {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: auto;
+    font-family: $monospace;
+    font-size: 12pt;
+
+    td {
+      padding: 0;
+      height: auto;
+    }
+
+    .bits td {
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      @include anim(border-bottom-color);
+
+      &:hover:not(:empty) {
+        color: #fff;
+      }
+
+      &:empty {
+        &:before {
+          content: '0';
+        }
+
+        @extend ._unused-bit;
+      }
+    }
+
+    @for $size from 1 through 8 {
+      &:not([data-bytes~="#{$size}"]) {
+        .byte#{$size}, .byte#{$size} span {
+          @extend  ._unused-bit;
+          }
+      }
+
+      &[data-highlight~="#{$size}"] .byte#{$size} {
+        border-bottom-color: $grid-highlight;
+      }
+
+    }
+
+
+    $gap: 2px;
+
+    .guide {
+      font-size: 80%;
+      vertical-align: bottom;
+      color: #a55;
+
+      span {
+        color: #00aa66;
+      }
+
+      td:nth-child(2n) span {
+        float: left;
+        padding-left: $gap/2;
+      }
+      td:nth-child(2n+1) span {
+        float: right;
+        padding-right: $gap/2;
+      }
+
+    }
+
+    // nibble boundary
+    .bits td:nth-child(4n+0) {
+      padding-right: $gap;
+      & + td {
+        padding-left: $gap;
+      }
+    }
+
+    $gap: $gap * 2;
+
+    // byte boundary
+    .bits td:nth-child(8n+0), .guide td:nth-child(8) {
+      padding-right: $gap;
+      & + td {
+        padding-left: $gap;
+      }
+    }
+
+    $gap: $gap * 2;
+
+    // WORD boundary
+    .bits td:nth-child(16), .guide td:nth-child(4) {
+      padding-right: $gap;
+      & + td {
+        padding-left: $gap;
+      }
+    }
+  }
+}
+

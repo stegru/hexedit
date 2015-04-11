@@ -1,0 +1,137 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <title>hi</title>
+
+    <style>
+
+        #splashWrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+            text-align: center;
+            z-index: 100;
+            background-color: #fff;
+        }
+
+        #splash {
+            display: inline-block;
+            position: relative;
+            padding: 2em;
+            top: calc((100% - 10em) / 2);
+            border: 2px solid black;
+            background-color: white;
+        }
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="style/hexedit.css"/>
+
+</head>
+
+
+<body>
+
+<div id="splashWrapper">
+    <div id="splash">
+        <p>Loading...</p>
+        <div class="progress fixed" style="width:20em">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="all" style="visibility: hidden" class="anim">
+
+    <div class="panel-container">
+        <div id="toolBar" class="panel "> </div>
+    </div>
+
+    <div id="HexEditorContainer">
+
+        <div id="HexEditor">
+            <div id="HexGrid">
+                <div id="below-grid-panels" class="panel-container">
+                    <div id="gotoPanel" class="panel collapsed">
+                        <form id="goto" action="#">
+                            <div style="padding: 4px">
+                                <label for="goto-offset">Go to offset:</label>
+                                <input type="text" id="goto-offset" class="monospace" style="width:8ch"/>
+                                <label for="goto-offset">from:</label>
+                                <select id="goto-whence">
+                                    <option id="start">start</option>
+                                    <option id="offset">current position</option>
+                                    <option id="end">end (reverse)</option>
+                                </select>
+                                <input type="checkbox" id="goto-extend"/><label for="goto-extend">Extend selection</label>
+                                <input type="submit" id="goto-go" style="font-size: 100%; padding: 4px 10px; margin: 0 2em" value="Go" />
+                            </div>
+                        </form>
+                    </div>
+                    <div id="searchPanel" class="panel collapsed" data-title="Search"><p>search</p></div>
+                </div>
+            </div>
+            <div>
+                <div class="panel-container sidePanel right">
+                    <div id="characterPanel" class="panel" data-title="Character"></div>
+                    <div id="bitsPanel" class="panel inspector" data-title="Bits"></div>
+                    <div id="numberInspector" class="panel inspector" data-title="Numbers"></div>
+                    <div id="textDataPanel" class="panel inspector" data-title="Text"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="panel-container">
+        <div id="statusBar" class="panel ">
+            <div>
+                <div>Offset: <span id="position" class="monospace"></span> <span id="selection"></span></div>
+            </div>
+            <div class="right">
+                <div>Length: <span id="length">0 bytes</span></div>
+                <div id="editMode" class="monospace"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="openDialog" class="dialog-content" data-title="title">
+        Select the location of the file you would like to open.
+        <div id="openLocations">
+
+        </div>
+    </div>
+
+    <div id="progressDialog" class="dialog-content">
+        <span id="progressText"></span>
+        <div id="progress" class="progress"></div>
+    </div>
+
+
+    <!--
+    <div class="dialog-behind modal" id="openDialog">
+        <div class="dialog">
+            <div class="dialog-title">title</div>
+            <div class="dialog-content">
+                hello
+                <div id="items"></div>
+            </div>
+            <div class="dialog-footer">
+                <div class="toolItem fa-eraser"><span>Delete</span></div>
+            </div>
+        </div>
+    </div>
+    -->
+</div>
+
+
+<script type="application/dart" src="main.dart"></script>
+<script type="application/javascript" src="packages/browser/dart.js"></script>
+</body>
+</html>
+

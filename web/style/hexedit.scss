@@ -1,0 +1,229 @@
+
+// theme
+//$text: #000;
+//$background: #fff;
+//
+//$ui-background: #eee;
+//$ui-border-color: #ccc;
+//$ui-border: 1px solid $ui-border-color;
+//$ui-text: $text;
+//$ui-content-background: $ui-background;
+//$ui-content-text: $ui-text;
+//
+//$button-background: #f0f0f0;
+//$button-text: #444;
+//$button-border: #999;
+//$button-hover-background: #fff;
+//$button-disabled-text: #999;
+//$button-disabled-hover-background: #f0f0f0;
+//
+//$dialog-background: $ui-content-background;
+//$dialog-text: $ui-content-text;
+//$dialog-title-background: #ddd;
+//$dialog-title-text: $ui-text;
+//$dialog-footer-background: $ui-background;
+//$dialog-footer-text: $ui-text;
+//
+//$dialog-separator: $ui-border;
+
+
+$dark: true;
+$light: $dark == false;
+$highlight-ammount: 4%;
+
+$text: #aaa;
+$background: #333;
+
+@function highlight($color) {
+  @if $dark {
+    @return lighten($color, $highlight-ammount);
+  }
+  @return darken($color, $highlight-ammount);
+}
+
+@function unhighlight($color) {
+  @if $light {
+    @return lighten($color, $highlight-ammount);
+  }
+  @return darken($color, $highlight-ammount);
+}
+
+
+@function highlight2($color) {
+  @return highlight(highlight($color));
+}
+@function unhighlight2($color) {
+  @return unhighlight(unhighlight($color));
+}
+
+
+
+$ui-background: highlight($background);
+$ui-border-color: highlight($ui-background);
+$ui-border: 1px solid $ui-border-color;
+$ui-text: $text;
+$ui-content-background: $ui-background;
+$ui-content-text: $ui-text;
+
+$button-background: highlight($ui-background);
+$button-text: $ui-text;
+$button-border: highlight2($button-background);
+$button-hover-background: lighten($button-background, 10%);
+$button-disabled-text: highlight2($button-background);
+$button-disabled-hover-background: lighten($button-background, 5%);
+
+$field-background: lighten($ui-background, 4%);
+$field-text: $ui-text;
+$field-focus-background: #000;
+$field-focus-text: lighten($ui-text, 10%);
+
+$dialog-background: $ui-content-background;
+$dialog-text: $ui-content-text;
+$dialog-title-background: #ddd;
+$dialog-title-text: $ui-text;
+$dialog-footer-background: $ui-background;
+$dialog-footer-text: $ui-text;
+
+$dialog-separator: $ui-border;
+
+$grid-background: $background;
+$grid-text: $text;
+$grid-gutter: highlight2($grid-background);
+$grid-gutter-text: $grid-text;
+
+$grid-hover: highlight($grid-background);
+
+$grid-highlight: #0a6;
+$grid-selection-background: #039;
+
+
+@import 'bourbon/bourbon';
+$fa-font-path: "font-awesome/fonts";
+@import "font-awesome/font-awesome";
+
+.fa > * { font-family: sans-serif; }
+
+$monospace: Monaco, Inconsolata, Consolas, "Courier New", monospace;
+$statusbarHeight: 22px;
+$toolbarHeight: 40px;
+
+
+@mixin inset-border($color) {
+  border: solid 1px highlight($color);
+  border-top-color: unhighlight2($color);
+  border-left-color: unhighlight2($color);
+}
+
+@mixin anim($properties...) {
+  @include prefixer(transition-property, $properties, webkit moz o ms spec);
+  @include prefixer(transition-duration, 200ms, webkit moz o ms spec);
+  @include prefixer(transition-timing-function, ease, webkit moz o ms spec);
+}
+
+@import "grid";
+@import "ui-elements";
+@import "panels";
+
+body {
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+
+.monospace {
+  font-family: $monospace;
+}
+
+.hide {
+  display: none;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: $background;
+  color: $text;
+}
+
+#splashWrapper {
+  background-color: $background !important;
+  #splash {
+    border-color: highlight($ui-border-color);
+    background-color: highlight($background) !important;
+  }
+}
+
+#all {
+  @include user-select(none);
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  cursor: default;
+}
+
+#splashWrapper.hide {
+  @include anim(opacity);
+  opacity: 0;
+}
+
+#toolBar {
+  height: $toolbarHeight;
+}
+
+#statusBar {
+  height: $statusbarHeight;
+}
+
+#HexEditor {
+  height: 100%;
+  position: relative;
+}
+
+input, select {
+  background-color: $field-background;
+  color: $field-text;
+  &:focus {
+    background-color: $field-focus-background;
+    color: $field-focus-text;
+  }
+}
+
+input[type="file"] {
+  position: absolute;
+  visibility: hidden;
+  top: -10em;
+}
+
+#openLocations {
+
+  padding: 1em;
+
+  .file-provider-item {
+    text-align: center;
+    display: inline-block;
+    width: 7em;
+    height: 7em;
+    position: relative;
+    margin-bottom: 2em;
+    cursor: pointer;
+
+    & > span {
+      position: relative;
+      top: 100%;
+    }
+
+    &:hover {
+      background-color: highlight($ui-background);
+    }
+
+  }
+}
+
+//@for $n from 0 through 255 {
+//  span.value[data-value="#{$n}"] {
+//    color: rgb($n/2+128, 0, 0);
+//  }
+//}
+
+

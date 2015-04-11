@@ -1,0 +1,218 @@
+#HexEditorContainer {
+  display: table;
+  height: 90%;
+  height: calc(100% - (#{$toolbarHeight} + #{$statusbarHeight}));
+  width: 100%;
+  overflow: hidden;
+
+  & > div {
+    display: table-row;
+    & > div {
+      display: table-cell;
+    }
+  }
+}
+
+
+#HexGrid {
+  vertical-align: top;
+  font-family: $monospace;
+  position: relative;
+  overflow: hidden;
+
+}
+
+#grid {
+  position: absolute;
+  cursor: text;
+
+  .hexrow {
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &:hover {
+      background-color: $grid-hover;
+    }
+
+    .spacer {
+      width: 2em;
+    }
+  }
+
+  span {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .header, .gutter {
+    cursor: default;
+    &, .hexrow.header:hover {
+      background-color: $grid-gutter;
+    }
+  }
+
+  .value {
+    position: relative;
+    text-align: center;
+    border-bottom: solid 2px transparent;
+    border-top: solid 2px transparent;
+
+    &.highlight {
+      border-bottom-color: $grid-highlight;
+    }
+
+    &.hasCursor {
+      color: #fff;
+    }
+
+    &.editing {
+      &::before {
+        content: '';
+      }
+    }
+
+    @include anim(border-bottom-color);
+  }
+
+  .hex {
+    width: 2.5ch;
+    padding-left: 0.5ch;
+    padding-right: 0.5ch;
+    min-height: 1em;
+  }
+
+  .ascii {
+    width: 1ch;
+    padding-right: 1px;
+    vertical-align: bottom;
+    height: 1em;
+  }
+
+  .hex.gutter {
+    width: 5ch;
+    border-top: 1px solid $grid-gutter;
+    border-bottom: 2px solid $grid-gutter;
+  }
+
+  .selectionHighlight {
+    display: none;
+    position: absolute;
+    height: 100%;
+    background-color: $grid-selection-background;
+    opacity: 1;
+    @include anim(opacity)
+  }
+
+  // highlight without the cursor
+  &.asciiCursor .selectionHighlight.hex, &.hexCursor .selectionHighlight.ascii {
+    opacity: 0.5;
+  }
+
+  // cursor on the other side
+  &.hexCursor .value.ascii.hasCursor, &.asciiCursor .value.hex.hasCursor {
+    text-decoration: underline;
+  }
+
+  .hasSelection {
+    .selectionHighlight {
+      display: inline-block;
+    }
+  }
+
+  .cursor {
+    display: inline-block;
+    position: absolute;
+    top: -1px;
+    height: 100%;
+    left: 0.5ch;
+
+    // unfocused:
+    width: 2.5ch;
+    border: 1px solid invert($background);
+
+
+    &.char2 {
+      left: 50%;
+    }
+
+    &.end {
+      left: auto;
+      right: 0.5ch;
+    }
+
+  }
+
+  &.hasFocus .cursor {
+    display: inline-block;
+    width: 2px;
+    background-color: invert($background);
+    border: none;
+    // blink
+    @include animation(1s blink step-end infinite);
+  }
+
+  .ascii .cursor {
+    left: 0;
+    max-width: 1ch;
+    &.end {
+      left: auto;
+      right: 0;
+    }
+  }
+
+  .hexrow {
+    .hex.col4, .hex.col12 { margin-left: 1ch; }
+    .hex.col8 { margin-left: 2ch; }
+    .ascii.col4, .ascii.col12 { margin-left: 4px; }
+    .ascii.col8 { margin-left: 7px; }
+  }
+}
+
+// cursor blink
+@include keyframes(blink) {
+  from {
+    background-color: invert($background);
+  }
+  to {
+    background-color: invert($background);
+  }
+  50% {
+    background-color: transparent;
+  }
+}
+
+// scroll bar
+.scroll {
+  @include anim(background-color);
+  position: relative;
+  width: 12px;
+  height: 100%;
+  background-color: $ui-background;
+  margin-left: 0.5em;
+
+  &:hover, &:active {
+    background-color: highlight($ui-background);
+    .scroll-thumb {
+      border: solid 1px highlight2(highlight2($ui-border-color));
+    }
+  }
+
+  .scroll-thumb {
+    display: inline-block;
+    position: relative;
+    background-color: highlight2($ui-background);
+    width: 100%;
+    width: calc(100% - 2px);
+    min-height: 1em;
+    border: solid 1px highlight2($ui-border-color);
+    &:hover {
+      background-color: highlight2(highlight2($ui-background));
+    }
+    &:active {
+      background-color: highlight2(highlight($ui-background));
+    }
+  }
+}
+

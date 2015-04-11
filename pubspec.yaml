@@ -1,0 +1,13 @@
+name: hexedit
+
+dependencies:
+  browser: any
+  bit_set: any
+  fixnum: any
+  crypto: any
+  sass: any
+
+
+transformers:
+  - sass:
+      style: compressed

@@ -1,0 +1,231 @@
+
+.button-group {
+  display: inline-block;
+  margin: 0 1ch 0 1ch;
+
+  .toolItem, .button {
+    margin: 0 0 0 -1px;
+    border-radius: 0;
+    &:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+    &:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+  }
+}
+
+
+.progress {
+  width: 30em;
+  height: 1em;
+
+  border: solid 1px highlight($ui-border-color);
+  //background-color: unhighlight($dialog-background);
+
+  .progress-bar {
+    width: 0;
+    height: 100%;
+    display: inline-block;
+
+    background-color: #0a0;
+    background-image: linear-gradient(45deg,
+            rgba(255,255,255,.20) 25%, transparent 25%,
+            transparent 50%, rgba(255,255,255,.20) 50%,
+            rgba(255,255,255,.20) 75%, transparent 75%,
+            transparent);
+    background-size: 3em 3em;
+
+    @include anim(width);
+  }
+
+  &.fixed .progress-bar {
+    width: 100%;
+  }
+
+  & .progress-bar {
+    @include animation(progress-spin 1s linear infinite);
+  }
+}
+
+@include keyframes(progress-spin) {
+  from {
+    background-position: 0;
+  }
+  to {
+    background-position: 3em;
+  }
+}
+
+.toolItem, .button {
+  display: inline-block;
+  padding: 5px;
+  background-color: $button-background;
+  color: $button-text;
+  margin: 0.5em;
+  border: 1px solid $button-border;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  box-sizing: border-box;
+  @extend .fa !optional;
+
+  &.disabled {
+    cursor: default;
+    color: $button-disabled-text;
+    &:hover {
+      background-color: $button-disabled-hover-background;
+    }
+  }
+
+  &::before {
+    font-size: 20px;
+    vertical-align: middle;
+    padding-right: 4px;
+  }
+
+  span {
+    vertical-align: middle;
+  }
+
+  box-shadow: inset 1px 1px 1px lighten($button-background, 15%);
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover {
+    background-color: $button-hover-background;
+    box-shadow: inset 1px 1px 1px lighten($button-hover-background, 50%);
+  }
+
+  &:active {
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, .2);
+  }
+
+  @include anim(background-color);
+}
+
+.button {
+  span {
+    padding: 0 4px 0 4px;
+  }
+
+  &:focus {
+    box-shadow: #33f 0px 0px 4px;
+  }
+}
+
+/// buttons
+.dialog-footer {
+  .button-ok, .button-yes {
+    @extend .fa-check !optional;
+    color: green;
+  }
+  .button-cancel, .button-no {
+    @extend .fa-close !optional;
+    color: red;
+  }
+  .button > span {
+    color: $button-text;
+  }
+
+  .button {
+    &[data-default="default"] {
+      font-weight: bold;
+    }
+  }
+
+}
+
+button, input[type="button"], input[type="submit"] {
+  @extend .button;
+}
+
+.dialog-content {
+  display: none;
+}
+
+.dialog-shade {
+  @include anim(background-color);
+
+
+  &.showing, &.hide, &.show {
+    display: block;
+  }
+
+  &.show {
+    background-color: rgba(0, 0, 0, 0.3);
+
+    .dialog {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
+
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0);
+  text-align: center;
+  display: none;
+
+  .dialog {
+    top: 30%;
+    background-color: $dialog-background;
+    color: $dialog-text;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 20em;
+    display: inline-block;
+    
+    transform: translateY(-20px);
+    opacity: 0;
+
+    @include anim(transform, opacity);
+
+    .dialog-content {
+      display: block;
+      text-align: left;
+      padding: 1em 0.5em 1em 0.5em;
+    }
+
+    .dialog-title, .dialog-footer {
+      padding: 5px;
+      font-size: 120%;
+      padding: 5px 10px 5px 10px;
+    }
+
+    .dialog-title {
+      text-align: center;
+      border-bottom: $dialog-separator;
+      background-color: $dialog-title-background;
+      color: $dialog-title-text;
+
+      &::before {
+        content: attr(data-title);
+      }
+    }
+
+    .dialog-title[data-title=""] {
+      display: none;
+    }
+
+    .dialog-footer {
+      text-align: right;
+      border-top: $dialog-separator;
+      background-color: $dialog-footer-background;
+      color: $dialog-footer-text;
+    }
+  }
+
+  &.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+}
+
